@@ -18,7 +18,7 @@ if 'LD_LIBRARY_PATH' not in os.environ:
 # Main, TimeFunc, TLE, EnvConst, AstroFunc, Sgp4Prop
 
 # Init Main
-maindll = c.CDLL('DllMain.dll')
+maindll = c.CDLL('libdllmain.so')
 # DllMainInit returns a handle which the other DLLs need to communicate with
 # each other
 maindll.DllMainInit.restype = c.c_int64
@@ -43,19 +43,19 @@ tledll.TleInit.argtypes = [c.c_int64]
 retcode = tledll.TleInit(maindll_handle)
 
 # Init EnvConst
-envdll = c.CDLL('EnvConst.dll')
+envdll = c.CDLL('libenvconst.so')
 envdll.EnvInit.restype = c.c_int
 envdll.EnvInit.argtypes = [c.c_int64]
 retcode = envdll.EnvInit(maindll_handle)
 
 # Init Astro
-astrodll = c.CDLL('AstroFunc.dll')
+astrodll = c.CDLL('libastrofunc.so')
 astrodll.AstroFuncInit.restype = c.c_int
 astrodll.AstroFuncInit.argtypes = [c.c_int64]
 retcode = astrodll.AstroFuncInit(maindll_handle)
 
 # Init SGP4
-sgp4dll = c.CDLL('Sgp4Prop.dll')
+sgp4dll = c.CDLL('libsgp4prop.so')
 # Gotta get that license file
 sgp4dll.Sgp4SetLicFilePath.argtypes = [c.c_char_p]
 sgp4dll.Sgp4SetLicFilePath(c.c_char_p(b"./libdll/"))
